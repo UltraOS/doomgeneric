@@ -32,7 +32,6 @@
 #include <direct.h>
 #endif
 #else
-#include <sys/stat.h>
 #include <sys/types.h>
 #endif
 
@@ -47,6 +46,7 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include <Ultra/Ultra.h>
 
 //
 // Create a directory
@@ -54,11 +54,7 @@
 
 void M_MakeDirectory(char *path)
 {
-#ifdef _WIN32
-    mkdir(path);
-#else
-    mkdir(path, 0755);
-#endif
+    create_directory(path);
 }
 
 // Check if a file exists
@@ -76,10 +72,9 @@ boolean M_FileExists(char *filename)
     }
     else
     {
-        // If we can't open because the file is a directory, the 
+        // If we can't open because the file is a directory, the
         // "file" exists at least!
-
-        return errno == EISDIR;
+	    return false;
     }
 }
 
